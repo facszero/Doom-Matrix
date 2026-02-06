@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<style>
+html, body {
+  margin: 0;
+  background: black;
+}
+
+#p {
+  font-family: Consolas, monospace;
+  font-size: 10px;
+  line-height: 10px;
+  color: #00ff41;
+  white-space: pre;
+  margin: 0;
+  text-shadow: 0 0 6px #00ff41;
+  animation: flicker 0.12s infinite alternate;
+}
+
+@keyframes flicker {
+  from { opacity: 0.95; }
+  to   { opacity: 1; }
+}
+
+/* scanlines */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0px,
+    rgba(0,0,0,0) 2px,
+    rgba(0,0,0,0.15) 3px
+  );
+  pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+<pre id="p"></pre>
+
+<script>
+async function tick(){
+  const r = await fetch("doom.txt?x=" + Date.now(), {cache:"no-store"});
+  document.getElementById("p").textContent = await r.text();
+  setTimeout(tick, 100);
+}
+tick();
+</script>
+</body>
+</html>
+
